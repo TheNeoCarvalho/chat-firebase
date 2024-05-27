@@ -7,7 +7,7 @@ export const AuthContextPriovider = ({ children }) => {
   const [isAuthenticaded, setIsAuthenticaded] = useState(undefined);
 
   useEffect(() => {
-    setIsAuthenticaded(false);
+      setIsAuthenticaded(false);
   }, []);
 
   return (
