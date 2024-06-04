@@ -1,28 +1,21 @@
-<<<<<<< Updated upstream
-import { createContext, useContext, useEffect, useState } from "react";
-=======
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { createContext, useContext, useState } from "react";
-import { auth, db } from "../firebaseConfig";
->>>>>>> Stashed changes
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthContextPriovider = ({ children }) => {
-<<<<<<< Updated upstream
   const [user, seUser] = useState(null);
   const [isAuthenticaded, setIsAuthenticaded] = useState(undefined);
 
   useEffect(() => {
-      setIsAuthenticaded(false);
+    setIsAuthenticaded(false);
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, isAuthenticaded }}>
-=======
-  const [user, setUser] = useState(null);
-  const [isAuthenticaded, setIsAuthenticaded] = useState(false);
+  const login = async (email, senha) => {
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, senha);
+    } catch (err) {}
+  };
 
   const registro = async (nome, email, senha, avatarUrl) => {
     try {
@@ -41,9 +34,17 @@ export const AuthContextPriovider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await signOut();
+      return { success: true };
+    } catch (err) {
+      return { success: false, msg: err.messase, error: err };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticaded, registro }}>
->>>>>>> Stashed changes
+    <AuthContext.Provider value={{ user, isAuthenticaded, registro, logout }}>
       {children}
     </AuthContext.Provider>
   );
