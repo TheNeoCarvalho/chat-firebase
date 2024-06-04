@@ -3,7 +3,7 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebaseConfig";
 
@@ -18,6 +18,7 @@ export const AuthContextPriovider = ({ children }) => {
       if (user) {
         setIsAuthenticaded(true);
         setUser(user);
+        updateUserData(user?.uid);
       } else {
         setIsAuthenticaded(false);
         setUser(null);
@@ -28,7 +29,22 @@ export const AuthContextPriovider = ({ children }) => {
     return unsub;
   }, []);
 
-  const registro = async (nome, email, senha, avatarUrl) => {
+  const updateUserData = async (userId) => {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      let data = docSnap.data();
+      setUser({
+        ...user,
+        name: data?.name,
+        avatarUrl: data?.avatarUrl,
+        userId: data?.userId,
+      });
+    }
+  };
+
+  const register = async (nome, email, senha, avatarUrl) => {
     try {
       const response = await createUserWithEmailAndPassword(auth, email, senha);
 
@@ -41,7 +57,7 @@ export const AuthContextPriovider = ({ children }) => {
       return { success: true, data: response?.user };
     } catch (err) {
       console.log(err);
-      return { success: false, msg: err };
+      return { success: false, msg: err.message };
     }
   };
 
@@ -54,7 +70,7 @@ export const AuthContextPriovider = ({ children }) => {
     }
   };
   return (
-    <AuthContext.Provider value={{ user, isAuthenticaded, registro, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticaded, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
+
 export default function SignIn() {
   const router = useRouter();
   return (
@@ -17,14 +18,14 @@ export default function SignIn() {
         <Text className="text-left w-80">Email</Text>
         <TextInput
           placeholder="Insira seu email aqui"
-          className="w-80 h-10 bg-gray-100 p-2 rounded"
+          className="w-80 h-10 bg-gray-300 p-2 rounded"
         />
 
         <Text className="text-left w-80">Senha</Text>
         <TextInput
           secureTextEntry
           placeholder="Insira sua senha aqui"
-          className="w-80 h-10 bg-gray-100 p-2 rounded"
+          className="w-80 h-10 bg-gray-300 p-2 rounded"
         />
       </View>
       <View className="flex-row my-4">

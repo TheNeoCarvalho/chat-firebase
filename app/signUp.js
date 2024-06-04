@@ -1,23 +1,34 @@
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Alert, Image, Pressable, Text, TextInput, View } from "react-native";
 import { userAuth } from "../context/authContext";
+
 export default function SignUp() {
-
   const router = useRouter();
-  const { registro } = userAuth();
+  const { register } = userAuth();
 
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  // const [nome, setNome] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [senha, setSenha] = useState("");
+  // const [avatarUrl, setAvatarUrl] = useState("");
+
+  const nome = useRef("");
+  const email = useRef("");
+  const senha = useRef("");
+  const avatarUrl = useRef("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegistro = async () => {
+  const handleRegister = async () => {
     if (!nome || !email || !senha || !avatarUrl) {
       Alert.alert("Cadastro", "Todos os campos são obrigatórios!");
+      return;
     }
-    let response = await registro(nome, email, senha, avatarUrl);
+    let response = await register(
+      nome.current,
+      email.current,
+      senha.current,
+      avatarUrl.current
+    );
 
     if (!response?.success) {
       Alert.alert("Cadastro", response.msg);
@@ -37,40 +48,36 @@ export default function SignUp() {
       <View className="w-full gap-2 items-center">
         <Text className="text-left w-80">Nome</Text>
         <TextInput
-          value={nome}
-          onChangeText={setNome}
+          onChangeText={(text) => (nome.current = text)}
           placeholder="Insira seu nome aqui"
-          className="w-80 h-10 bg-gray-200 p-2 rounded"
+          className="w-80 h-10 bg-gray-300 p-2 rounded"
         />
 
         <Text className="text-left w-80">Email</Text>
         <TextInput
-          value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => (email.current = text)}
           placeholder="Insira seu email aqui"
-          className="w-80 h-10 bg-gray-200 p-2 rounded"
+          className="w-80 h-10 bg-gray-300 p-2 rounded"
         />
 
         <Text className="text-left w-80">Senha</Text>
         <TextInput
-          value={senha}
-          onChangeText={setSenha}
+          onChangeText={(text) => (senha.current = text)}
           secureTextEntry
           placeholder="Insira sua senha aqui"
-          className="w-80 h-10 p-2 bg-gray-200 rounded"
+          className="w-80 h-10 p-2 bg-gray-300 rounded"
         />
 
         <Text className="text-left w-80">Avatar URL</Text>
         <TextInput
-          value={avatarUrl}
-          onChangeText={setAvatarUrl}
+          onChangeText={(text) => (avatarUrl.current = text)}
           placeholder="Insira a url da imagem aqui"
-          className="w-80 h-10 bg-gray-200 p-2 rounded"
+          className="w-80 h-10 bg-gray-300 p-2 rounded"
         />
       </View>
 
       <Pressable
-        onPress={handleRegistro}
+        onPress={handleRegister}
         className="bg-teal-300 w-80 h-10 mt-8 rounded- justify-center items-center"
       >
         <Text className="text-xl font-bold">Cadastrar</Text>
@@ -88,4 +95,4 @@ export default function SignUp() {
       </View>
     </View>
   );
-  };
+};
