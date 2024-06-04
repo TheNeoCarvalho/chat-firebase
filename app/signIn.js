@@ -1,6 +1,8 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
 export default function SignIn() {
+  const router = useRouter();
   return (
     <View className="flex-1 justify-center items-center mx-8">
       <Image
@@ -34,7 +36,13 @@ export default function SignIn() {
       </Pressable>
       <View className="flex-row my-4">
         <Text className="my-4">Não possui conta?</Text>
-        <Text className="my-4 mx-2 font-bold underline">criar conta</Text>
+        <Pressable
+          onPress={() => {
+            router.replace("signUp");
+          }}
+        >
+          <Text className="my-4 mx-2 font-bold underline">criar conta</Text>
+        </Pressable>
       </View>
     </View>
   );
